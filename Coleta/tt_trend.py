@@ -19,9 +19,6 @@ import pandas as pd
 df_data = pd.DataFrame()
 
  																			#FUNÇÔES
-def remover_acentos(tags_trend):
-	for key, tag in enumerate(tags_trend):
-		tags_trend[key] =normalize('NFKD', tag).encode('ASCII','ignore').decode('ASCII')
 
 def write_file(datas,filename):
 	with open('%s.csv'%(filename), 'a') as csvfile:
@@ -58,14 +55,16 @@ access_token_secret = "wlq5xEKhpveeUt0HRWX6zlJYwh7pgYq1btmn1wtwSYpw5"
 													# Referencia para API: https://dev.twitter.com/rest/reference
 twitter = TwitterAPI(consumer_key, consumer_secret,auth_type='oAuth2')
 
-#print (df)
 
 
 
-#data_of_trend = datatime.now()
+
+
 result_cont = 0
 contador = 0
 tags_trend = []
+
+
 
 
 
@@ -99,9 +98,22 @@ while True:
 		print df_data
 
 		#write_dataframe(df_data,data_arq)
-		
+		datetime= datetime.now()
+		print(datetime)
 
-		time.sleep(60)
+		hour = int(datetime.hour)
+		minute = int(datetime.minute)
+
+		print (hour)
+		print(minute)
+		if hour == 16 and minute == 45:
+			print"oi"
+			df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
+			write_dataframe(df_data,data_arq)
+
+
+
+		time.sleep(58)
 				
 
 	except Exception as err:
@@ -109,7 +121,8 @@ while True:
 		write_dataframe(df_data,data_arq)
 
 		#print"ERROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
-		#err= time.sleep(900)
+	
+	
 
 
 #remover_acentos(tags_trend)
