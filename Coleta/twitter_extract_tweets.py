@@ -18,6 +18,9 @@ def remover_acentos(tags_trend):
 	for key, tag in enumerate(tags_trend):
 		tags_trend[key] =normalize('NFKD', tag).encode('ASCII','ignore').decode('ASCII')
 
+def acents(text):
+	return normalize('NFKD',text).encode('ASCII','ignore').decode('ASCII') 
+
 #Credencias de acesso App Twitter
 
 consumer_key = "iSTl8Phe1eAaXuZPuOLi2iXTI"
@@ -40,27 +43,9 @@ result_max = 100000
 result_cont = 0
 dh = datetime.now()
 contador = 0
-tags_trend = []
 
 
 
-
-
-r = twitter.request('trends/place', {'id': '23424768'})
-for item in r.get_iterator():
-	tweet = item['name']
-	if contador<10:
-		print(tweet)
-		tags_trend.append(tweet)
-
-		contador +=1
-	else:{"Finalizado"}
-
-	#w = twitter.request('search/tweets', {'q': item[item_cont]})
-
-remover_acentos(tags_trend)
-print(tags_trend)
-#print('Coleta Relalizada com Sucesso! \n')
 
 
 
