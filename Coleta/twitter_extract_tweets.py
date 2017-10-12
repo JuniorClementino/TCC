@@ -10,7 +10,7 @@ from pymongo import MongoClient
 
 import sys
 import json
-import os.path  	
+import os.path
 import time
 import pymongo
 
@@ -19,7 +19,7 @@ def remover_acentos(tags_trend):
 		tags_trend[key] =normalize('NFKD', tag).encode('ASCII','ignore').decode('ASCII')
 
 def acents(text):
-	return normalize('NFKD',text).encode('ASCII','ignore').decode('ASCII') 
+	return normalize('NFKD',text).encode('ASCII','ignore').decode('ASCII')
 
 #Credencias de acesso App Twitter
 
@@ -71,14 +71,14 @@ while result_cont < result_max:
 						'retweets_count':item['retweet_count']
 					}
 				)
-			
+
 				result_cont += 1
 			except Exception as inst:
 				#print(type(inst))
 				pass
-		
+
 		tag_cont += 1
-			
-		
-		
+
+
+
 		print("%d tweets capturados"%result_cont)

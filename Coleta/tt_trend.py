@@ -16,34 +16,26 @@ import os.path
 import time
 import pymongo
 import pandas as pd
+
+data_dic={'Trends_Tags':[''],'Dia':['']}
+
 df_data = pd.DataFrame()
 
  																			#FUNÇÔES
 
 def write_file(datas,filename):
-	with open('%s.csv'%(filename), 'a') as csvfile:
+	with open('%s.csv'%(filename), 'a') as csvfile:	
 		spamwriter = (csv.writer((csvfile))) 
 		for row in datas:
 			spamwriter.writerow(row)
 			
 def write_dataframe(df,file):
-    df.to_csv('%s.csv'%file, mode='a', sep=';',index=False, header=False)
+    df.to_csv('%s.csv'%file, mode='a', sep=';',index=False, header=True)
 
 def acents(text):
 	return normalize('NFKD',text).encode('ASCII','ignore').decode('ASCII')    
 			
-			
-
-
-				
-				
-
-
-			
-
-
-
-
+		
 																#Credencias de acesso App Twitter
 
 consumer_key = "iSTl8Phe1eAaXuZPuOLi2iXTI"
@@ -106,9 +98,9 @@ while True:
 
 		print (hour)
 		print(minute)
-		if hour == 16 and minute == 45:
+		if hour == 00 and minute == 59:
 			print"oi"
-			df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
+			df_data ['Tags_Trends'], df_data['Dia_Trend'] = tags_trend , data_arq 
 			write_dataframe(df_data,data_arq)
 
 
