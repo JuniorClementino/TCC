@@ -30,9 +30,6 @@ coluna = df.columns
 index = df.index
 count = df.count()
 
-print(df.ix[3])
-
-
-
+print df.head(30)
 
 

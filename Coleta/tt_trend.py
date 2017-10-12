@@ -98,9 +98,9 @@ while True:
 
 		print (hour)
 		print(minute)
-		if hour == 00 and minute == 59:
+		if hour == 01 and minute == 52:
 			print"oi"
-			df_data ['Tags_Trends'], df_data['Dia_Trend'] = tags_trend , data_arq 
+			df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
 			write_dataframe(df_data,data_arq)
 
 
