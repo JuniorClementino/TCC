@@ -5,7 +5,13 @@ from TwitterAPI import *
 from datetime import *
 from unicodedata import normalize
 from pymongo import MongoClient
-
+from TwitterAPI import *
+from datetime import *
+from unicodedata import normalize
+from pymongo import MongoClient
+from datetime import datetime, date, time
+import numpy as np
+import pandas as pd
 
 
 import sys
@@ -13,6 +19,15 @@ import json
 import os.path
 import time
 import pymongo
+
+def read_csv(file):
+		df1 = pd.DataFrame.from_csv('%s.csv'%(file),sep=';',encoding ='ISO-8859-1')
+
+		df1 = df1.reset_index(level=None, drop=False, inplace=False, col_level=0, col_fill='')
+
+		return df1
+
+
 
 def remover_acentos(tags_trend):
 	for key, tag in enumerate(tags_trend):
@@ -38,13 +53,15 @@ twitter = TwitterAPI(consumer_key, consumer_secret,auth_type='oAuth2')
 client = MongoClient()
 db = client.baseTweetsTrends
 
-
+tags_trend= []
 result_max = 100000
 result_cont = 0
 dh = datetime.now()
 contador = 0
 
-
+df = read_csv('2017-10-12')
+arr= df['tags'].values
+tags_trend.append(arr)
 
 
 
