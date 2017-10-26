@@ -120,6 +120,7 @@ while result_cont < result_max:
 			print("%d tweets capturados"%result_cont)		
 	except Exception as	inst:
 		print("OUTRO")
+		print("AGUARDANDO TIME OUT")
 		time.sleep(950)
 		pass
 

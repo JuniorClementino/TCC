@@ -84,7 +84,7 @@ def fazer(tags_trend):
         minute = int(oi.minute)
         segundo = int(oi.second)
         #print verifica_h
-        if hour == 13 and minute == 17 and segundo ==30:
+        if hour == 16 and minute == 50 and segundo ==00:
         	
         	
         	verifica_h=True
@@ -126,13 +126,17 @@ def main(tags_trend):
 					tags_trend.append(trends)
 					saveTrends(trends,data_arq)
 
+			print(len(tags_trend))
+			print("Esperando 30, para proxima coleta....... AGUARDE")
+			time.sleep(1800)
+
+
 
 					
 #  RENOVERRRR    RT   db.getCollection('tweets_copy').remove({'text':{$regex:'^RT'}})
 			
 
 		except Exception as err:
-			print("entro")
 			print (type(err))
 			print("Espera de 15 min time out do Twitter")
 			time.sleep(900)
