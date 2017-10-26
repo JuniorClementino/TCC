@@ -12,6 +12,7 @@ from pymongo import MongoClient
 from datetime import datetime, date, time
 import numpy as np
 import pandas as pd
+import os
 
 
 import sys
@@ -20,6 +21,10 @@ import os.path
 import time
 import pymongo
 
+
+
+def remove_file():
+	os.remove("TRENDS_TOP.csv")
 
 
 def read_csv(file):
@@ -68,6 +73,8 @@ tags_trend=arr
 
 
 print(tags_trend)
+remove_file()
+
 
 #Adicionando os Trends no Banco de Dados
 

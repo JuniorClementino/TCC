@@ -83,8 +83,8 @@ def fazer(tags_trend):
         hour = int(oi.hour)
         minute = int(oi.minute)
         segundo = int(oi.second)
-        #print verifica_h
-        if hour == 16 and minute == 50 and segundo ==00:
+        # DETERMINANDO HORARIO DE ESCREVER NO ARQUIVO
+        if hour == 17 and minute == 19 and segundo ==00:
         	
         	
         	verifica_h=True
