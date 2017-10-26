@@ -16,9 +16,15 @@ import os.path
 import time
 import pymongo
 import pandas as pd
-from threading import Thread
+import thread
+import threading
 
 verifica_h=False
+result_cont = 0
+contador = 0
+tags_trend = []
+nome_arquivo= "TRENDS_TOP"
+data_arq = str (date.today())
 
 
 
@@ -50,7 +56,13 @@ def write_dataframe(df,file):
 
 def acents(text):
 	return normalize('NFKD',text).encode('ASCII','ignore').decode('ASCII')    
-			
+
+def gravar():
+	df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
+	write_dataframe(df_data,nome_arquivo)
+	saveTrends(df_data,data_arq)
+	verifica_h=False
+						
 		
 																#Credencias de acesso App Twitter
 
@@ -63,41 +75,37 @@ access_token_secret = "wlq5xEKhpveeUt0HRWX6zlJYwh7pgYq1btmn1wtwSYpw5"
 													# Referencia para API: https://dev.twitter.com/rest/reference
 twitter = TwitterAPI(consumer_key, consumer_secret,auth_type='oAuth2')
 
+def fazer(tags_trend):
+    verifica_h =False
+    while True:
+        verifica_h = False
+       	oi= datetime.now()
+        hour = int(oi.hour)
+        minute = int(oi.minute)
+        segundo = int(oi.second)
+        #print verifica_h
+        if hour == 13 and minute == 17 and segundo ==30:
+        	
+        	
+        	verifica_h=True
+        	gravar_tags(tags_trend)
 
-class Th(Thread):
-
-                def __init__ (self, num):
-                	Thread.__init__(self)
-                	self.num = num
-
-                def run(self):
-                	verifica_h =False
-                	print "funcao run"
-                	while True:
-                		verifica_h = False
-                		oi= datetime.now()
-                		hour = int(oi.hour)
-                		minute = int(oi.minute)
-                		segundo = int(oi.second)
-                		print verifica_h
-                		if hour == 10 and minute == 38 and segundo ==05:
-                			verifica_h=True
                 			
 
-      
+def gravar_tags(tags_trend):
+	nome_arquivo= "TRENDS_TOP"
+	print("Gravouooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
+	data_arq = str (date.today())
+	df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
+	write_dataframe(df_data,nome_arquivo)
+	print (tags_trend)
+	#saveTrends(df_data,data_arq)
 
+		    
 
-
-
-
-def main():
-	verifica_h= False
-
-
+def main(tags_trend):
 	result_cont = 0
 	contador = 0
-	tags_trend = []
-	nome_arquivo= "TRENDS_TOP"
 
 
 
@@ -116,52 +124,28 @@ def main():
 					data_arq = str (date.today())
 					#remover_acentos(tags_trend)
 					tags_trend.append(trends)
-					#saveTrends(trends,data_arq)
+					saveTrends(trends,data_arq)
+
 
 					
-	   #  RENOVERRRR    RT   db.getCollection('tweets_copy').remove({'text':{$regex:'^RT'}})
-					
-					
-
-					
-			data_arq = str (date.today())		
-			print(len(tags_trend))		
-			print(tags_trend)
-			data_arq = str (date.today())
+#  RENOVERRRR    RT   db.getCollection('tweets_copy').remove({'text':{$regex:'^RT'}})
 			
-			if(verifica_h==True):
-				df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
-				write_dataframe(df_data,nome_arquivo)
-				saveTrends(df_data,data_arq)
-				verifica_h=False
-			else:
-				time.sleep(58)
-
-
-
-
-					
 
 		except Exception as err:
 			print("entro")
 			print (type(err))
+			print("Espera de 15 min time out do Twitter")
+			time.sleep(900)
+			pass
 			
-			
-
-			#data_arq = str (date.today())
-			#df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
-			#write_dataframe(df_data,nome_arquivo)
-			
-			
-			
-
-		#print"ERROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
+			#MAAAIN 
 	
 if __name__ == "__main__":
 	verifica_h =False
-	a = Th(1)
-	a.start() 
-	main()
+	tags_trend = []
+	t1 = threading.Thread(name='Thread-1-Som', target=fazer, args=[tags_trend])
+	t1.start()
+	main(tags_trend)
 
 
 		
