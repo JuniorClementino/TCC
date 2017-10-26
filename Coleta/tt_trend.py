@@ -18,7 +18,9 @@ import pymongo
 import pandas as pd
 from threading import Thread
 
-verifica_h = False
+verifica_h=False
+
+
 
 data_dic={'Trends_Tags':[''],'Dia':['']}
 
@@ -69,13 +71,18 @@ class Th(Thread):
                 	self.num = num
 
                 def run(self):
-
-                    oi= datetime.now()
-                    print(oi)
-                    hour = int(oi.hour)
-                    minute = int(oi.minute)
-                    if hour == 16 and minute == 23:
-						verifica_h=True
+                	verifica_h =False
+                	print "funcao run"
+                	while True:
+                		verifica_h = False
+                		oi= datetime.now()
+                		hour = int(oi.hour)
+                		minute = int(oi.minute)
+                		segundo = int(oi.second)
+                		print verifica_h
+                		if hour == 10 and minute == 38 and segundo ==05:
+                			verifica_h=True
+                			
 
       
 
@@ -84,6 +91,7 @@ class Th(Thread):
 
 
 def main():
+	verifica_h= False
 
 
 	result_cont = 0
@@ -127,7 +135,7 @@ def main():
 				saveTrends(df_data,data_arq)
 				verifica_h=False
 			else:
-				time.sleep(60)
+				time.sleep(58)
 
 
 
@@ -136,11 +144,14 @@ def main():
 
 		except Exception as err:
 			print("entro")
-			print(type(err))
+			print (type(err))
+			
+			
+
 			#data_arq = str (date.today())
 			#df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
 			#write_dataframe(df_data,nome_arquivo)
-			pass
+			
 			
 			
 
