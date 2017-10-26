@@ -17,6 +17,8 @@ import pymongo
 import pandas as pd
 tags_trend = []
 
+
+
 def read_csv(file):
 		df1 = pd.DataFrame.from_csv('%s.csv'%(file),sep=';',encoding ='ISO-8859-1')
 
@@ -24,9 +26,9 @@ def read_csv(file):
 
 		return df1
 
-df = read_csv('2017-10-12')
+df = read_csv('2017-10-17')
 
-#df = pd.read_csv('2017-10-12.csv', names= ['DIAS'])
+#df = pd.read_csv('2017-10-17.csv', names= ['DIAS'])
 
 
 linha= df.shape
@@ -38,13 +40,25 @@ count = df.count()
 
 
 
-row = next(df.iterrows())[1]
+#row = next(df.iterrows())[1]
+
+
 
 arr= df['tags'].values
-tags_trend.append(arr)
-#print arr
+#str(arr)
+#tags_trend.append(arr)
+#print tags_trend
 
-print(arr[26])
+#oi= df['tags'].values[1]
+#str(oi)
+#tags_trend.append(oi)
+#print tags_trend
+
+
+numpy_teste=np.asarray(arr)
+print numpy_teste
+
+
 
 
 

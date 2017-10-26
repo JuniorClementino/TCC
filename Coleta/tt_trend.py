@@ -16,21 +16,35 @@ import os.path
 import time
 import pymongo
 import pandas as pd
+from threading import Thread
+
+verifica_h = False
 
 data_dic={'Trends_Tags':[''],'Dia':['']}
 
 df_data = pd.DataFrame()
 
- 																			#FUNÇÔES
+
+
+def saveTrends(tag,date):
+	try:
+		db.trends.insert_one(
+						{
+							'tag':tag,
+							'date':date
+						}
+					)
+	except Exception as inst:
+		pass 																			#FUNÇÔES
 
 def write_file(datas,filename):
-	with open('%s.csv'%(filename), 'a') as csvfile:	
+	with open('%s.csv'%(filename), 'w') as csvfile:	
 		spamwriter = (csv.writer((csvfile))) 
 		for row in datas:
 			spamwriter.writerow(row)
 			
 def write_dataframe(df,file):
-    df.to_csv('%s.csv'%file, mode='a', sep=';',index=False, header=True)
+    df.to_csv('%s.csv'%file, mode='w', sep=';',index=False, header=True)
 
 def acents(text):
 	return normalize('NFKD',text).encode('ASCII','ignore').decode('ASCII')    
@@ -48,89 +62,99 @@ access_token_secret = "wlq5xEKhpveeUt0HRWX6zlJYwh7pgYq1btmn1wtwSYpw5"
 twitter = TwitterAPI(consumer_key, consumer_secret,auth_type='oAuth2')
 
 
+class Th(Thread):
+
+                def __init__ (self, num):
+                	Thread.__init__(self)
+                	self.num = num
+
+                def run(self):
+
+                    oi= datetime.now()
+                    print(oi)
+                    hour = int(oi.hour)
+                    minute = int(oi.minute)
+                    if hour == 16 and minute == 23:
+						verifica_h=True
+
+      
 
 
 
 
-result_cont = 0
-contador = 0
-tags_trend = []
+
+def main():
+
+
+	result_cont = 0
+	contador = 0
+	tags_trend = []
+	nome_arquivo= "TRENDS_TOP"
 
 
 
 
+	  									#Coleta Streams intervalo de 1 minuto dos top 50 trends
+	while True:
+		try:
 
-  									#Coleta Streams intervalo de 1 minuto dos top 50 trends
-while True:
-	try:
-
-		r = twitter.request('trends/place', {'id': '23424768'})
-		for item in r.get_iterator():
-			trends = item['name']
-			print(trends)
-			trends=acents(trends)
-			#remover_acentos(tags_trend)
-			if trends not in  tags_trend:
+			r = twitter.request('trends/place', {'id': '23424768'})
+			for item in r.get_iterator():
+				trends = item['name']
+				print(trends)
+				trends=acents(trends)
 				#remover_acentos(tags_trend)
-				tags_trend.append(trends)
-				
+				if trends not in  tags_trend:
+					data_arq = str (date.today())
+					#remover_acentos(tags_trend)
+					tags_trend.append(trends)
+					#saveTrends(trends,data_arq)
 
-				
-				
+					
+	   #  RENOVERRRR    RT   db.getCollection('tweets_copy').remove({'text':{$regex:'^RT'}})
+					
+					
 
-				
-		data_arq = str (date.today())		
-		#df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
-		print(len(tags_trend))	
-		#remover_acentos(tags_trend)			
-		print(tags_trend)
-		data_arq = str (date.today())
-		#write_file(tags_trend, data_arq)
-		#write_dataframe(df,data_arq)
-		print df_data
-
-		#write_dataframe(df_data,data_arq)
-		datetime= datetime.now()
-		print(datetime)
-
-		hour = int(datetime.hour)
-		minute = int(datetime.minute)
-
-		print (hour)
-		print(minute)
-		if hour == 01 and minute == 52:
-			print"oi"
-			df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
-			write_dataframe(df_data,data_arq)
+					
+			data_arq = str (date.today())		
+			print(len(tags_trend))		
+			print(tags_trend)
+			data_arq = str (date.today())
+			
+			if(verifica_h==True):
+				df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
+				write_dataframe(df_data,nome_arquivo)
+				saveTrends(df_data,data_arq)
+				verifica_h=False
+			else:
+				time.sleep(60)
 
 
 
-		time.sleep(58)
-				
 
-	except Exception as err:
-		df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
-		write_dataframe(df_data,data_arq)
+					
+
+		except Exception as err:
+			print("entro")
+			print(type(err))
+			#data_arq = str (date.today())
+			#df_data ['tags'], df_data['dia'] = tags_trend , data_arq 
+			#write_dataframe(df_data,nome_arquivo)
+			pass
+			
+			
 
 		#print"ERROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
 	
-	
+if __name__ == "__main__":
+	verifica_h =False
+	a = Th(1)
+	a.start() 
+	main()
 
 
-#remover_acentos(tags_trend)
-#print(tags_trend)
-#print('Coleta Relalizada com Sucesso! \n')
-
-
-
-		#	try:
-				
-		#	except Exception as inst:
-			#	time.out(900)
-			#	pass
 		
-	#	tag_cont += 1
-			
-		
-		
-		#print("%d tweets capturados"%result_cont)
+
+
+
+
