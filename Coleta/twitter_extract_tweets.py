@@ -20,6 +20,7 @@ import json
 import os.path
 import time
 import pymongo
+import re
 
 
 
@@ -55,7 +56,7 @@ access_token_secret = "wlq5xEKhpveeUt0HRWX6zlJYwh7pgYq1btmn1wtwSYpw5"
 twitter = TwitterAPI(consumer_key, consumer_secret,auth_type='oAuth2')
 
 
-##DataBase
+					##DataBase
 
 client = MongoClient()
 db = client.baseTweetsTrends
@@ -65,7 +66,8 @@ result_max = 100000
 result_cont = 0
 dh = datetime.now()
 contador = 0
- #Do arquivo para um array 
+
+ 					#Do arquivo para um array 
 df = read_csv('TRENDS_TOP')
 arr= df['tags'].values
 print arr
@@ -76,12 +78,20 @@ print(tags_trend)
 remove_file()
 
 
-#Adicionando os Trends no Banco de Dados
 
 
+					#Limpando o Arquivo
+remove_file()
 
 
-#Limpando o Arquivo, 
+					#Expressão Regular eliminar RT do Banco de Dados
+regx = re.compile('^RT')
+
+client = MongoClient()
+db = client.baseTweetsTrends
+
+db.tweets_copy.remove({'text':regx})		
+
 
 
 
